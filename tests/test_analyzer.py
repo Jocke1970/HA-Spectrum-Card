@@ -8,7 +8,7 @@ import numpy as np
 
 os.environ.setdefault("HA_URL","http://homeassistant.local:8123")
 os.environ.setdefault("HA_TOKEN","test-only")
-MODULE=pathlib.Path(__file__).resolve().parents[1]/"analyzer"/"analyzer.py"
+MODULE=pathlib.Path(__file__).resolve().parents[1]/"apps"/"spectrum_fft"/"analyzer.py"
 spec=importlib.util.spec_from_file_location("spectrum_analyzer",MODULE)
 analyzer=importlib.util.module_from_spec(spec)
 spec.loader.exec_module(analyzer)
