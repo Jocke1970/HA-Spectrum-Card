@@ -21,9 +21,9 @@ Requires FFmpeg, Python 3, a reachable MQTT broker and Home Assistant MQTT integ
 
 1. Set up an MQTT broker and HA MQTT integration.
 2. On a Linux host run `sudo apt install ffmpeg python3-venv`.
-3. Clone/check out **dev**, create a venv and install dependencies: `python3 -m venv .venv && .venv/bin/pip install -r analyzer/requirements.txt`.
-4. Export `HA_URL`, `HA_TOKEN`, `MEDIA_ENTITY`, `MQTT_HOST`, `MQTT_USER`, `MQTT_PASSWORD` according to `analyzer/.env.example`. **Never commit tokens or passwords.**
-5. Run `.venv/bin/python analyzer/analyzer.py` while Radio Browser is playing on `media_player.kok`. Check whether MQTT discovers `sensor.ha_spectrum_levels`.
+3. Clone/check out **dev**, create a venv and install dependencies: `python3 -m venv .venv && .venv/bin/pip install -r apps/spectrum_fft/requirements.txt`.
+4. Export `HA_URL`, `HA_TOKEN`, `MEDIA_ENTITY`, `MQTT_HOST`, `MQTT_USER`, `MQTT_PASSWORD` according to `apps/spectrum_fft/.env.example`. **Never commit tokens or passwords.**
+5. Run `.venv/bin/python apps/spectrum_fft/analyzer.py` while Radio Browser is playing on `media_player.kok`. Check whether MQTT discovers `sensor.ha_spectrum_levels`.
 6. Copy `dist/ha-spectrum-card.js` to `/config/www/ha-spectrum-card.js`. Add `/local/ha-spectrum-card.js` as a JavaScript module under Dashboard resources, then add `examples/lovelace.yaml` as a custom card.
 
 ## Limitations and testing needed
@@ -41,3 +41,8 @@ Requires FFmpeg, Python 3, a reachable MQTT broker and Home Assistant MQTT integ
 ## Development policy
 
 `dev → beta → main`. The **dev** branch contains experimental code only. Do not install dev on production Home Assistant. Promote to beta only after validating the analyzer and frontend, then to main after stable real-world testing.
+
+## Canonical layout
+The runnable backend lives under `apps/spectrum_fft/`, including Dockerfile, requirements, analyzer, configuration and launcher. The frontend lives in `dist/`. Tests live in `tests/` and are never installed. `repository.yaml` registers this Home Assistant app repository. No temporary HA `/config` Python copies are used.
+
+**Browser playback:** HA Media Browser can play in the web browser, where decoding occurs locally. A Lovelace card cannot access the audio of another browser tab such as Spotify. FFT of independently reachable HTTP(S) radio URLs is possible, but may be out of sync with playback. Spotify FFT is unsupported.
