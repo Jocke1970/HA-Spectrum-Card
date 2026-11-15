@@ -70,6 +70,7 @@ def main():
     }),qos=1,retain=True)
     current=None
     proc=None
+    buffer=bytearray()
     next_poll=0
     try:
         while True:
@@ -82,6 +83,7 @@ def main():
                 if desired!=current or (proc is not None and proc.poll() is not None):
                     stop(proc)
                     proc=None
+                    buffer.clear()
                     current=desired
                     publish(client,[0]*10,"")
                     if desired:
@@ -102,11 +104,10 @@ def main():
                 time.sleep(1)
                 continue
             # Accumulate full PCM windows; partial reads must not lose alignment.
-            if not hasattr(main,"buffer"): main.buffer=bytearray()
-            main.buffer.extend(pcm)
-            while len(main.buffer)>=FFT_SIZE*2:
-                frame=bytes(main.buffer[:FFT_SIZE*2])
-                del main.buffer[:FFT_SIZE*2]
+            buffer.extend(pcm)
+            while len(buffer)>=FFT_SIZE*2:
+                frame=bytes(buffer[:FFT_SIZE*2])
+                del buffer[:FFT_SIZE*2]
                 computed=levels(frame)
                 if computed is not None: publish(client,computed,current)
     except KeyboardInterrupt:
