@@ -6,6 +6,6 @@ This app reads Home Assistant media player state through the Supervisor's Core A
 
 Requires Home Assistant OS (not Home Assistant Container), MQTT integration and broker. The default broker host `core-mosquitto` assumes the official Mosquitto broker app is installed. Supply its username/password in app options. If your MQTT integration uses another broker, adjust the host.
 
-A custom app repository needs the root `repository.yaml`. Docker builds and the path layout must be validated before a beta release. The Dockerfile uses a Python image with FFmpeg and copies the analyzer from the repository root, which must be included in build context; verify this in Home Assistant's builder before publishing. Do not expose this app publicly until URL restrictions and recovery logic have been reviewed.
+A custom app repository needs the root `repository.yaml`. Docker builds and the path layout must be validated before a beta release. The Dockerfile uses only files from this app directory. Verify the build in Home Assistant before publishing. Do not expose this app publicly until URL restrictions and recovery logic have been reviewed.
 
 App is manual-start for test isolation. Stop it to end FFT processing.
