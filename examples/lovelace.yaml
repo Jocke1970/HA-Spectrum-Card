@@ -1,0 +1,4 @@
+type: custom:ha-spectrum-card
+entity: media_player.kok
+spectrum_entity: sensor.ha_spectrum_levels
+title: SPECTRUM ANALYZER
